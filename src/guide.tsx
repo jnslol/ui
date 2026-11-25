@@ -1,17 +1,18 @@
 import { ArrowUpRight, BookOpen, Box, Download, PanelsTopLeft } from "lucide-react"
-import { InstallCommand } from "./catalog"
+import { InstallCommand, installCommand, registryUrl } from "./catalog"
 import { sampleProjects } from "./demo-data"
+import { ActivityFeed, type ActivityEntry } from "./ui/staff-activity-feed"
 import { buttonClass } from "./ui/staff-button"
 import { Badge } from "./ui/staff-display"
 import { Page, PageHeader, Panel, Section } from "./ui/staff-layout"
 
 export const repository = "https://github.com/jnslol/ui"
 const exampleProjectId = sampleProjects[0].id
-const registryAddress = (name: string) => new URL(`r/${name}.json`, document.baseURI).href
-const install = (name: string) => `npx shadcn@latest add "${registryAddress(name)}"`
 
 const blocks = [
-  { name: "App shell", item: "shell", href: "#/workspace", description: "Grouped navigation, desktop compact mode, and a keyboard-accessible mobile drawer." },
+  { name: "Workspace sidebar", item: "sidebar-workspace", href: "#/preview/sidebar-workspace", description: "A workspace switcher, grouped navigation, member view, and account menu." },
+  { name: "Project sidebar", item: "sidebar-projects", href: "#/preview/sidebar-projects", description: "A compact rail with searchable projects, a work queue, and workspace preferences." },
+  { name: "Activity feed", item: "activity-feed", href: "#/activity", description: "Recent changes with actor avatars, timestamps, and status." },
   { name: "Workspace", item: "workspace-page", href: "#/workspace", description: "Key figures and recent activity for an operational home screen." },
   { name: "List", item: "list-page", href: "#/projects", description: "A searchable table with status filters and empty states." },
   { name: "Record", item: "record-page", href: `#/projects/${exampleProjectId}`, description: "An entity header, actions, notes, and a separate attribute rail." },
@@ -38,7 +39,7 @@ export function Overview() {
           <Panel className="flex flex-col gap-2 p-4">
             <PanelsTopLeft aria-hidden className="size-5 text-accent-fg" />
             <h3 className="text-heading font-semibold"><a href="#/blocks" className="hover:underline">Pages and blocks</a></h3>
-            <p className="text-muted">Preview the app shell and five page patterns. Install each one with the shadcn CLI.</p>
+            <p className="text-muted">Preview complete sidebars and compose pages from the same components. Install each one with the shadcn CLI.</p>
           </Panel>
           <Panel className="flex flex-col gap-2 p-4">
             <Download aria-hidden className="size-5 text-accent-fg" />
@@ -59,13 +60,13 @@ export function Overview() {
 }
 
 export function Setup() {
-  const namespace = JSON.stringify({ registries: { "@jns": registryAddress("{name}").replace("%7Bname%7D", "{name}") } }, null, 2)
+  const namespace = JSON.stringify({ registries: { "@jns": registryUrl("{name}").replace("%7Bname%7D", "{name}") } }, null, 2)
   return (
     <Page width="narrow">
       <PageHeader title="Installation" description="Add jns ui components as editable source to a React project." />
       <Section title="Install a block">
         <p>Start with React 19, Tailwind CSS v4, and a shadcn-initialized project. Install any item by its JSON URL.</p>
-        <InstallCommand command={install("jns-shell")} />
+        <InstallCommand command={installCommand("sidebar-workspace")} />
         <p>The CLI puts the files in the directory configured by <code>aliases.ui</code> and installs their dependencies.</p>
       </Section>
       <Section title="Import the tokens">
@@ -76,7 +77,7 @@ export function Setup() {
       <Section title="Use the JNS namespace">
         <p>Merge this configuration into your existing <code>components.json</code> to install items by name.</p>
         <pre className="overflow-x-auto rounded-card border border-divider bg-surface p-3 text-label">{namespace}</pre>
-        <InstallCommand command="npx shadcn@latest add @jns/jns-button @jns/jns-list-page" />
+        <InstallCommand command="npx shadcn@latest add @jns/button @jns/list-page" />
       </Section>
     </Page>
   )
@@ -89,9 +90,25 @@ export function Blocks() {
       {blocks.map(({ name, item, href, description }) => (
         <Section key={item} title={name} description={description}
           actions={<a href={href} className={buttonClass({ size: "xs" })}>Open preview <ArrowUpRight aria-hidden /></a>}>
-          <InstallCommand command={install(`jns-${item}`)} />
+          <InstallCommand command={installCommand(item)} />
         </Section>
       ))}
+    </Page>
+  )
+}
+
+const recentActivity: ActivityEntry[] = [
+  { id: "release", actor: "Maya Chen", action: "completed the campus site survey.", when: "Today at 9:40 AM", status: { label: "Complete", tone: "success" } },
+  { id: "coverage", actor: "Jordan Ellis", action: "added the warehouse coverage plan.", when: "Yesterday at 4:15 PM", status: { label: "In review", tone: "info" } },
+  { id: "schedule", actor: "Sofia Rivera", action: "updated the branch refresh schedule.", when: "Yesterday at 11:30 AM" },
+]
+
+export function ActivityPage() {
+  return (
+    <Page width="narrow">
+      <PageHeader title="Activity feed" description="A record of recent changes in a workspace." />
+      <ActivityFeed entries={recentActivity} />
+      <InstallCommand command={installCommand("activity-feed")} />
     </Page>
   )
 }

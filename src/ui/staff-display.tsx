@@ -65,15 +65,7 @@ export function EmptyState({ icon, title, description, action, className }: { ic
   )
 }
 
-export function Avatar({ name, className }: { name: string; className?: string }) {
-  const initials = name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0]!.toUpperCase())
-    .join("")
-  return <span className={cx("inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-micro font-semibold text-accent-fg", className)} aria-hidden>{initials}</span>
-}
+export { Avatar } from "./staff-avatar"
 
 // ---- Tabs ----
 
@@ -108,6 +100,8 @@ export function LinkTabs({ children, className }: { children: React.ReactNode; c
   return <nav className={cx("flex items-center gap-5 overflow-x-auto border-b border-divider", className)}>{children}</nav>
 }
 export const linkTabClass = tabClass
+
+export const TabPanel = BaseTabs.Panel
 
 // ---- Table ----
 

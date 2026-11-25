@@ -8,31 +8,33 @@ import { cx } from "./staff-cx"
 
 export type SidebarLink = {
   label: string
-  icon: React.ReactNode
+  icon?: React.ReactNode
   href: string
   active?: boolean
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>
 }
 
 export type SidebarGroup = { label: string; links: SidebarLink[] }
 
 export function StaffSidebar({
-  brand, groups, footer, compact = false, onNavigate,
+  brand, groups, footer, compact = false, onNavigate, label = "Main navigation",
 }: {
   brand: React.ReactNode
   groups: SidebarGroup[]
   footer?: React.ReactNode
   compact?: boolean
   onNavigate?: () => void
+  label?: string
 }) {
   return (
-    <nav aria-label="Main navigation" className="flex h-full flex-col gap-4 overflow-y-auto bg-subtle px-2 py-3">
+    <nav aria-label={label} className="flex h-full flex-col gap-4 overflow-y-auto bg-subtle px-2 py-3">
       <div className={cx("flex h-8 shrink-0 items-center gap-2 font-semibold", compact ? "justify-center" : "px-2")}>
         {brand}
       </div>
       {groups.map((group) => (
         <div key={group.label} className="flex flex-col gap-px" role="group" aria-label={group.label}>
           {!compact && <div aria-hidden className="px-2 pb-1 text-micro font-medium tracking-wide text-muted">{group.label}</div>}
-          {group.links.map(({ label, icon, href, active }) => (
+          {group.links.map(({ label, icon, href, active, onClick }) => (
             <a
               key={href}
               href={href}
@@ -40,14 +42,17 @@ export function StaffSidebar({
               aria-label={compact ? label : undefined}
               aria-current={active ? "page" : undefined}
               onClick={(event) => {
-                if (event.button === 0 && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) onNavigate?.()
+                if (event.button === 0 && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+                  onClick?.(event)
+                  onNavigate?.()
+                }
               }}
               className={cx(
                 "flex h-[30px] items-center gap-2.5 rounded-control px-2 text-body font-medium text-sidebar-fg hover:bg-hover aria-[current=page]:bg-active aria-[current=page]:text-fg [&>svg]:size-4 [&>svg]:shrink-0",
                 compact && "justify-center",
               )}
             >
-              {icon}
+              {icon ?? (compact && <span aria-hidden className="text-micro uppercase">{label.slice(0, 2)}</span>)}
               {!compact && <span className="truncate">{label}</span>}
             </a>
           ))}

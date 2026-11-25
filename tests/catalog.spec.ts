@@ -5,9 +5,11 @@ test("serves installable registry items at their documented URLs", async ({ requ
   expect(manifest.ok()).toBe(true)
   const { items } = await manifest.json() as { items: { name: string }[] }
   expect(items.map((item) => item.name)).toEqual(expect.arrayContaining([
-    "jns-theme", "jns-shell", "jns-list-page", "jns-record-page", "jns-form-page", "jns-settings-page", "jns-workspace-page",
+    "theme", "avatar", "accordion", "sidebar", "sidebar-workspace", "sidebar-projects", "activity-feed",
+    "list-page", "record-page", "form-page", "settings-page", "workspace-page",
   ]))
   for (const { name } of items) {
+    expect(name).not.toMatch(/^jns-/)
     const response = await request.get(`/r/${name}.json`)
     expect(response.ok()).toBe(true)
     const item = await response.json()

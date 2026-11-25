@@ -1,8 +1,8 @@
 import { useState, useSyncExternalStore } from "react"
 import { createRoot } from "react-dom/client"
 import { BookOpen, Box, Download, FileText, Folder, House, LayoutGrid, PanelsTopLeft, Settings } from "lucide-react"
-import { Components, InstallCommand } from "./catalog"
-import { Blocks, Overview, Setup, Templates, repository } from "./guide"
+import { Components, componentLinks, InstallCommand, installCommand } from "./catalog"
+import { ActivityPage, Blocks, Overview, Setup, Templates, repository } from "./guide"
 import { buttonClass } from "./ui/staff-button"
 import { sampleProjects } from "./demo-data"
 import { TooltipProvider } from "./ui/staff-overlay"
@@ -11,7 +11,8 @@ import { ProjectRecord } from "./ui/staff-record-page"
 import { ProjectForm } from "./ui/staff-form-page"
 import { WorkspaceSettings } from "./ui/staff-settings-page"
 import { WorkspacePage } from "./ui/staff-workspace-page"
-import { StaffShell } from "./ui/staff-shell"
+import { ProjectSidebar, WorkspaceSidebar } from "./ui/staff-sidebar-blocks"
+import { StaffShell, type SidebarGroup } from "./ui/staff-shell"
 import { useStaffTheme } from "./ui/staff-theme"
 import "./index.css"
 
@@ -32,17 +33,24 @@ const recordHref = (id: string) => `#/projects/${id}`
 
 function Catalog() {
   const page = useSyncExternalStore(subscribe, path)
+  const [theme, setTheme] = useStaffTheme()
   const [projects, setProjects] = useState(sampleProjects)
   const [compact, setCompact] = useState(false)
-  const [theme, setTheme] = useStaffTheme()
+
+  const Preview = page === "/preview/sidebar-workspace" ? WorkspaceSidebar : page === "/preview/sidebar-projects" ? ProjectSidebar : null
+  if (Preview) return <Preview key={page} actions={<a href="#/blocks" className={buttonClass({ variant: "ghost" })}>Back to blocks</a>} />
+
   const project = projects.find((project) => page === `/projects/${project.id}` || page === `/edit/${project.id}`)
   const form = page === "/new" || page.startsWith("/edit/")
   const record = !form && Boolean(project)
   const activePage = form ? "/new" : record ? links[1].items[2][1] : page
-  const groups = links.map(({ label, items }) => ({
+  const groups: SidebarGroup[] = links.map(({ label, items }) => ({
     label,
     links: items.map(([name, to, Icon]) => ({ label: name, href: `#${to}`, icon: <Icon aria-hidden />, active: activePage === to })),
   }))
+  groups.push({ label: "Components", links: componentLinks.map(({ id, title }) => ({
+    label: title, href: `#/components/${id}`, active: page === `/components/${id}`,
+  })) })
   const title = groups.flatMap((group) => group.links).find((item) => item.active)?.label ?? "Examples"
   const block = form ? "form" : record ? "record" : ({ "/projects": "list", "/workspace": "workspace", "/settings": "settings" } as Record<string, string>)[page]
 
@@ -60,7 +68,8 @@ function Catalog() {
   else if (project) content = <ProjectRecord key={project.id} project={project} listHref="#/projects" editHref={`#/edit/${project.id}`} />
   else if (page === "/settings") content = <WorkspaceSettings theme={theme} onThemeChange={setTheme} compact={compact} onCompactChange={setCompact} />
   else if (page === "/setup") content = <Setup />
-  else if (page === "/components") content = <Components />
+  else if (page === "/components" || page.startsWith("/components/")) content = <Components key={page} id={page.split("/")[2]} />
+  else if (page === "/activity") content = <ActivityPage />
   else if (page === "/blocks") content = <Blocks />
   else if (page === "/templates") content = <Templates />
   else content = <Overview />
@@ -69,10 +78,11 @@ function Catalog() {
     <TooltipProvider>
       <StaffShell pageKey={page} context={title} groups={groups} compact={compact} onCompactChange={setCompact}
         brand={(collapsed) => <><span className="grid size-6 shrink-0 place-items-center rounded-control bg-accent text-accent-on"><Box className="size-4" aria-hidden /></span>{!collapsed && "jns ui"}</>}
+        actions={<a href={repository} className={buttonClass({ variant: "ghost", size: "xs" })}>GitHub</a>}
         footer={<a href={new URL("r/registry.json", document.baseURI).href} className="text-label text-muted hover:text-fg">Registry index ↗</a>}>
         {content}
         {block && <div className="mx-auto max-w-[1400px] px-4 pb-6 md:px-6"><InstallCommand key={block}
-          command={`npx shadcn@latest add "${new URL(`r/jns-${block}-page.json`, document.baseURI).href}"`} /></div>}
+          command={installCommand(`${block}-page`)} /></div>}
       </StaffShell>
     </TooltipProvider>
   )
