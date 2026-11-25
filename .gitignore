@@ -1,0 +1,8 @@
+node_modules/
+dist/
+public/r/
+test-results/
+playwright-report/
+.env
+.data/
+/registry.json
