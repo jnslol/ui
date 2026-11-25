@@ -5,12 +5,18 @@ const base = ["@base-ui/react", "lucide-react"]
 const theme = ["@fontsource-variable/inter", "@fontsource-variable/jetbrains-mono"]
 const entries = {
   theme: { title: "Theme and tokens", description: "Indigo and slate colors, typography, density, and light and dark themes.", files: ["tokens.css", "theme.ts"], packages: theme },
-  button: { title: "Buttons", description: "Six action variants, three control heights, async buttons, and keyboard hints.", files: ["button.tsx", "cx.ts"], needs: ["theme"], packages: base },
+  hooks: { title: "Hooks", description: "Controllable state, keyboard shortcuts, media queries, clipboard, debouncing, and disclosure state.", files: ["hooks.ts"], lib: true },
+  button: { title: "Button", description: "Nine variants, four heights, button groups, hold-to-confirm, async and copy buttons, and keyboard hints.", files: ["button.tsx", "cx.ts"], needs: ["theme", "hooks"], packages: base },
+  toggle: { title: "Toggle", description: "A pressable button that stays on, and groups of them.", files: ["toggle.tsx", "cx.ts"], needs: ["theme"], packages: base },
+  "input-group": { title: "Input Group", description: "Inputs with icons, units, buttons, and shortcut hints, plus search and password inputs.", files: ["input-group.tsx"], needs: ["form", "button"] },
+  command: { title: "Command", description: "A searchable command list and a keyboard-driven command palette.", files: ["command.tsx"], needs: ["button"] },
+  item: { title: "Item", description: "A list row with media, a title and description, and actions.", files: ["item.tsx", "cx.ts"], needs: ["theme"] },
+  "scroll-area": { title: "Scroll Area", description: "A scrolling region with overlay scrollbars and edge fades.", files: ["scroll-area.tsx", "cx.ts"], needs: ["theme"], packages: ["@base-ui/react"] },
   form: { internal: true, title: "Form controls", description: "Fields, text inputs, checkbox, switch, radio group, and segmented controls.", files: ["form.tsx", "cx.ts"], needs: ["theme"], packages: base },
-  select: { title: "Select", description: "Base UI select with staff field styles.", files: ["select.tsx"], needs: ["form"] },
+  select: { title: "Select", description: "Base UI select with jns ui field styles.", files: ["select.tsx"], needs: ["form"] },
   combobox: { title: "Combobox", description: "A searchable picker that supports local and remote options.", files: ["combobox.tsx"], needs: ["select"] },
   display: { internal: true, title: "Display and feedback", description: "Badges, tabs, tables, callouts, toasts, and empty states.", files: ["display.tsx"], needs: ["button", "avatar"] },
-  overlay: { internal: true, title: "Overlays", description: "Dialog, confirmation, menu, popover, and tooltip.", files: ["overlay.tsx"], needs: ["button", "select"] },
+  overlay: { internal: true, title: "Overlays", description: "Dialog with alert and sheet variants, dropdown and context menus, popover and hover card, and tooltip.", files: ["overlay.tsx"], needs: ["button", "select"] },
   layout: { internal: true, title: "Page layout", description: "Headers, breadcrumbs, panels, record bodies, settings rows, and save bars.", files: ["layout.tsx", "cx.ts"], needs: ["theme"], packages: ["lucide-react"] },
   sidebar: { title: "Sidebar", description: "Grouped navigation, compact desktop rail, and a mobile drawer.", files: ["shell.tsx"], needs: ["button"] },
   accordion: { title: "Accordion", description: "Expandable sections.", files: ["accordion.tsx"], needs: ["theme"], packages: base },
@@ -34,10 +40,12 @@ const entries = {
 // Some existing primitives share one source module. Each gets its own install address.
 const groupedComponents = {
   display: { alert: "Alert", badge: "Badge", empty: "Empty", meter: "Meter", skeleton: "Skeleton", spinner: "Spinner", table: "Table", tabs: "Tabs", toast: "Toast" },
-  overlay: { "alert-dialog": "Alert Dialog", dialog: "Dialog", "dropdown-menu": "Dropdown Menu", popover: "Popover", tooltip: "Tooltip" },
+  overlay: { dialog: "Dialog", "dropdown-menu": "Menu", popover: "Popover", tooltip: "Tooltip" },
   form: { checkbox: "Checkbox", field: "Field", input: "Input", "radio-group": "Radio Group", segmented: "Segmented", switch: "Switch", textarea: "Textarea" },
   layout: { breadcrumb: "Breadcrumb" },
-  button: { kbd: "Kbd" },
+  button: { kbd: "Kbd", "button-group": "Button Group" },
+  toggle: { "toggle-group": "Toggle Group" },
+  "input-group": { "number-field": "Number Field", "input-otp": "Input OTP" },
 }
 for (const [group, components] of Object.entries(groupedComponents)) {
   for (const [name, title] of Object.entries(components)) entries[name] = { title, files: [], needs: [group] }
@@ -51,18 +59,18 @@ function include(name, files = new Set(), packages = new Set()) {
   return { files, packages }
 }
 
-const items = Object.entries(entries).filter(([, item]) => !item.internal).map(([name, { title, description, block }]) => {
+const items = Object.entries(entries).filter(([, item]) => !item.internal).map(([name, { title, description, block, lib }]) => {
   const { files, packages } = include(name)
   return {
     name,
-    type: block ? "registry:block" : "registry:ui",
+    type: block ? "registry:block" : lib ? "registry:lib" : "registry:ui",
     title,
     description,
     // Include relative source dependencies so a direct JSON URL also works without a namespace.
     dependencies: [...packages].map((pkg) => `${pkg}@${dependencies[pkg]}`),
     files: [...files].map((file) => ({
-      path: `src/ui/staff-${file}`,
-      target: `@ui/staff-${file}`,
+      path: `src/ui/${file}`,
+      target: `@ui/${file}`,
       type: file.endsWith(".css") ? "registry:file" : "registry:ui",
     })),
   }

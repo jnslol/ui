@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test"
 
 test("lists each installable component individually in the sidebar", async ({ page, request }) => {
   const manifest = await (await request.get("/r/registry.json")).json() as { items: { name: string; type: string }[] }
-  const expected = manifest.items.filter(({ type }) => type === "registry:ui").map(({ name }) => name).sort()
+  const expected = manifest.items.filter(({ type }) => type === "registry:ui" || type === "registry:lib").map(({ name }) => name).sort()
 
   await page.goto("/")
   const group = page.getByRole("navigation", { name: "Main navigation" }).getByRole("group", { name: "Components", exact: true })
@@ -58,4 +58,52 @@ test("project sidebar drawer closes when a mobile user selects a destination", a
   await expect(drawer).toBeHidden()
   await expect(page.getByRole("heading", { name: "Work queue" })).toBeVisible()
   expect(await page.getByRole("main").evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true)
+})
+
+test("one dialog covers the default, alert and sheet variants", async ({ page }) => {
+  await page.goto("/#/components/dialog")
+  await page.getByRole("button", { name: "View project summary" }).click()
+  const dialog = page.getByRole("dialog", { name: "Project summary" })
+  await expect(dialog.getByRole("button", { name: "Close" })).toBeVisible()
+  await page.keyboard.press("Escape")
+  await expect(dialog).toBeHidden()
+
+  await page.getByRole("radio", { name: "alert" }).or(page.getByRole("button", { name: "alert", exact: true })).click()
+  await page.getByRole("button", { name: "Remove project" }).click()
+  const alert = page.getByRole("alertdialog", { name: "Remove project?" })
+  await expect(alert).toBeVisible()
+  await expect(alert.getByRole("button", { name: "Close" })).toHaveCount(0)
+  await alert.getByRole("button", { name: "Remove project" }).click()
+  await expect(alert).toBeHidden()
+  await expect(page.getByRole("status").filter({ hasText: "Project removed." })).toBeVisible()
+
+  await page.getByRole("radio", { name: "sheet" }).or(page.getByRole("button", { name: "sheet", exact: true })).click()
+  await page.getByRole("button", { name: "Edit project details" }).click()
+  await expect(page.getByRole("dialog", { name: "Project details" }).getByLabel("Project name")).toHaveValue("North Campus rollout")
+})
+
+test("command palette opens from the keyboard and runs a fuzzy match", async ({ page }) => {
+  await page.goto("/#/components/command")
+  await expect(page.getByRole("heading", { name: "Command", exact: true })).toBeVisible()
+  await page.keyboard.press("ControlOrMeta+k")
+  const palette = page.getByRole("dialog", { name: "Command palette" })
+  await expect(palette).toBeVisible()
+  await palette.getByRole("combobox").fill("remove")
+  await expect(palette.getByRole("option", { name: "Archive project" })).toHaveAttribute("aria-selected", "true")
+  await page.keyboard.press("Enter")
+  await expect(palette).toBeHidden()
+  await expect(page.getByRole("status").filter({ hasText: "Project archived." })).toBeVisible()
+})
+
+test("menu offers the same items as a dropdown and a context menu", async ({ page }) => {
+  await page.goto("/#/components/dropdown-menu")
+  await page.getByRole("button", { name: "Project actions" }).click()
+  await page.getByRole("menuitemcheckbox", { name: "Show archived" }).click()
+  await expect(page.getByRole("menuitemcheckbox", { name: "Show archived" })).toHaveAttribute("aria-checked", "true")
+  await page.keyboard.press("Escape")
+
+  await page.getByRole("radio", { name: "context" }).or(page.getByRole("button", { name: "context", exact: true })).click()
+  await page.getByText("Right-click or long-press here").click({ button: "right" })
+  await page.getByRole("menuitem", { name: "Duplicate" }).click()
+  await expect(page.getByRole("status").filter({ hasText: "Project duplicated." })).toBeVisible()
 })

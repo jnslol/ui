@@ -1,7 +1,7 @@
 "use client"
 
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { Button } from "./staff-button"
+import { Button } from "./button"
 
 export function Pagination({ page, totalPages, onPageChange, label = "Pagination" }: {
   page: number

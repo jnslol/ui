@@ -2,11 +2,11 @@
 
 import { useState } from "react"
 import { FolderKanban, Pencil, Trash2 } from "lucide-react"
-import { Button, buttonClass } from "./staff-button"
-import { Badge } from "./staff-display"
-import { AttributeList, Breadcrumbs, EntityHeader, Page, Panel, RecordBody, Section } from "./staff-layout"
-import { ConfirmDialog } from "./staff-overlay"
-import { statuses, type Project } from "./staff-project"
+import { Button, buttonClass } from "./button"
+import { Badge } from "./display"
+import { AttributeList, Breadcrumbs, EntityHeader, Page, Panel, RecordBody, Section } from "./layout"
+import { Dialog } from "./overlay"
+import { statuses, type Project } from "./project"
 
 export function ProjectRecord({
   project, listHref, editHref, onDelete,
@@ -42,9 +42,9 @@ export function ProjectRecord({
           ]} />
         </Panel>}
       />
-      {onDelete && <ConfirmDialog open={confirm} onOpenChange={setConfirm} title="Delete project?"
+      {onDelete && <Dialog variant="alert" open={confirm} onOpenChange={setConfirm} title="Delete project?"
         description={`“${project.name}” will be removed permanently.`} confirmLabel="Delete project" cancelLabel="Cancel"
-        variant="danger" onConfirm={onDelete} />}
+        onConfirm={onDelete} />}
     </Page>
   )
 }

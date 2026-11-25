@@ -1,9 +1,9 @@
 /*
- * Design tokens for the staff app ("quiet, dense, record-first").
+ * Design tokens for jns ui ("quiet, dense, record-first").
  * Colors are Radix Colors steps (slate neutral, indigo accent); every component reads the semantic names below,
  * never a step, so the dark theme only redefines variables (the `[data-theme="dark"]` block below, Radix's dark steps).
  * The theme is on <html data-theme>: set to light or dark by the host application.
- * Import after `tailwindcss`: `@import "./ui/staff-tokens.css";`
+ * Import after `tailwindcss`: `@import "./ui/tokens.css";`
  */
 @import "@fontsource-variable/inter";
 @import "@fontsource-variable/jetbrains-mono";

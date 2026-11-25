@@ -3,9 +3,9 @@
 import { Combobox as BaseCombobox } from "@base-ui/react/combobox"
 import { Check, ChevronsUpDown } from "lucide-react"
 
-import { cx } from "./staff-cx"
-import { controlClass, type ControlSize } from "./staff-form"
-import { itemClass, popupClass } from "./staff-select"
+import { cx } from "./cx"
+import { controlClass, type ControlSize } from "./form"
+import { itemClass, popupClass } from "./select"
 
 export type ComboItem = { value: string; label: string; hint?: string }
 

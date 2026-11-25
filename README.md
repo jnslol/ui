@@ -1,6 +1,6 @@
 # jns ui
 
-A source registry and two full-stack starters based on the ISP staff app’s Base UI design system. The registry carries over its slate and indigo tokens, 13 px body text, compact controls, status tones, and light and dark themes. The catalog and both starters use the same component source.
+jns ui is an opinionated React design system built on Base UI, distributed as a shadcn source registry, with two full-stack starters. It ships slate and indigo tokens, 13 px body text, compact controls, status tones, and light and dark themes. The catalog and both starters use the same component source.
 
 [Documentation, component previews, and template downloads](https://jnslol.github.io/ui/)
 
@@ -37,14 +37,22 @@ For shorter commands, add this to the existing `registries` in your `components.
 npx shadcn@latest add @jns/avatar @jns/button
 ```
 
-Items install transitive source files under the configured `aliases.ui` directory. Import `staff-tokens.css` once in your global CSS, directly after Tailwind. Adjust this path to match the location of that stylesheet and your UI directory.
+Items install transitive source files under the configured `aliases.ui` directory. Import `tokens.css` once in your global CSS, directly after Tailwind. Adjust this path to match the location of that stylesheet and your UI directory.
 
 ```css
 @import "tailwindcss";
-@import "./components/ui/staff-tokens.css";
+@import "./components/ui/tokens.css";
 ```
 
-The tokens set global typography, focus styles, the Tailwind spacing unit, and shared color names. Review these global styles when adding jns ui to an existing themed app. Dark mode uses `<html data-theme="dark">`. The `useStaffTheme` hook handles light, dark, and system preference.
+The tokens set global typography, focus styles, the Tailwind spacing unit, and shared color names. Review these global styles when adding jns ui to an existing themed app. Dark mode uses `<html data-theme="dark">`. The `useTheme` hook handles light, dark, and system preference.
+
+Related surfaces are merged into one component with a variant, so they share props and behavior:
+
+- `Dialog` has `variant="default" | "alert" | "sheet"` (with `side="right" | "left" | "bottom"` for sheets). `ConfirmDialog` remains as a deprecated alias for `variant="alert"`.
+- `Menu` has `variant="dropdown" | "context"`, and both variants take the same `items`: actions, checkbox, radio, and submenus.
+- `Popover` has `openOn="click" | "hover"`, so it also serves as a hover card.
+
+`@jns/hooks` installs the shared utilities: `useControllableState`, `useHotkey`, `useMediaQuery`, `useCopyToClipboard`, `useDebouncedValue`, and `useDisclosure`.
 
 Use the `@jns` namespace or a full item URL to select this registry. For example, `@jns/avatar` installs the jns ui avatar, while `@jns/sidebar-workspace` installs a working workspace shell. The generated `r/registry.json` lists all components and blocks.
 

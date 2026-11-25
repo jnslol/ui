@@ -2,12 +2,12 @@
 
 import { useState } from "react"
 import { FolderOpen, Plus, Search } from "lucide-react"
-import { Button, buttonClass } from "./staff-button"
-import { Avatar, Badge, EmptyState, Table, Td, Th, Tr } from "./staff-display"
-import { AffixInput } from "./staff-form"
-import { Page, PageHeader, Panel, Toolbar } from "./staff-layout"
-import { Select } from "./staff-select"
-import { statuses, statusOptions, type Project, type ProjectStatus } from "./staff-project"
+import { Button, buttonClass } from "./button"
+import { Avatar, Badge, EmptyState, Table, Td, Th, Tr } from "./display"
+import { AffixInput } from "./form"
+import { Page, PageHeader, Panel, Toolbar } from "./layout"
+import { Select } from "./select"
+import { statuses, statusOptions, type Project, type ProjectStatus } from "./project"
 
 export function ProjectList({
   projects, createHref, recordHref,

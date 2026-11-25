@@ -2,7 +2,7 @@
 
 import { Avatar as BaseAvatar } from "@base-ui/react/avatar"
 import { UserRound } from "lucide-react"
-import { cx } from "./staff-cx"
+import { cx } from "./cx"
 
 const sizes = { sm: "size-6 text-micro", md: "size-8 text-label", lg: "size-10 text-body" }
 

@@ -1,8 +1,8 @@
 import { ArrowRight, FolderKanban } from "lucide-react"
-import { buttonClass } from "./staff-button"
-import { Badge, EmptyState } from "./staff-display"
-import { Page, PageHeader, Panel, Section, StatGrid } from "./staff-layout"
-import { statuses, type Project } from "./staff-project"
+import { buttonClass } from "./button"
+import { Badge, EmptyState } from "./display"
+import { Page, PageHeader, Panel, Section, StatGrid } from "./layout"
+import { statuses, type Project } from "./project"
 
 export function WorkspacePage({
   projects, listHref, recordHref,

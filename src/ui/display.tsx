@@ -5,8 +5,8 @@ import { Tabs as BaseTabs } from "@base-ui/react/tabs"
 import { Toast as BaseToast } from "@base-ui/react/toast"
 import { Loader2, X } from "lucide-react"
 
-import { buttonClass } from "./staff-button"
-import { cx } from "./staff-cx"
+import { buttonClass } from "./button"
+import { cx } from "./cx"
 
 export type Tone = "success" | "warning" | "danger" | "info" | "neutral" | "accent"
 
@@ -65,7 +65,7 @@ export function EmptyState({ icon, title, description, action, className }: { ic
   )
 }
 
-export { Avatar } from "./staff-avatar"
+export { Avatar } from "./avatar"
 
 // ---- Tabs ----
 

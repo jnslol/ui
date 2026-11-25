@@ -3,8 +3,8 @@
 import * as React from "react"
 import { Dialog } from "@base-ui/react/dialog"
 import { Menu, PanelLeft, X } from "lucide-react"
-import { buttonClass } from "./staff-button"
-import { cx } from "./staff-cx"
+import { buttonClass } from "./button"
+import { cx } from "./cx"
 
 export type SidebarLink = {
   label: string
@@ -16,7 +16,7 @@ export type SidebarLink = {
 
 export type SidebarGroup = { label: string; links: SidebarLink[] }
 
-export function StaffSidebar({
+export function AppSidebar({
   brand, groups, footer, compact = false, onNavigate, label = "Main navigation",
 }: {
   brand: React.ReactNode
@@ -63,7 +63,7 @@ export function StaffSidebar({
   )
 }
 
-export function StaffShell({
+export function AppShell({
   brand, groups, footer, context, actions, children, compact = false, onCompactChange, pageKey,
 }: {
   brand: (compact: boolean) => React.ReactNode
@@ -93,7 +93,7 @@ export function StaffShell({
   return (
     <div className={cx("grid h-dvh min-h-0 bg-bg", compact ? "lg:grid-cols-[52px_minmax(0,1fr)]" : "lg:grid-cols-[232px_minmax(0,1fr)]")}>
       <aside id={sidebarId} className="hidden min-h-0 border-r border-divider lg:block">
-        <StaffSidebar brand={brand(compact)} groups={groups} footer={footer} compact={compact} />
+        <AppSidebar brand={brand(compact)} groups={groups} footer={footer} compact={compact} />
       </aside>
       <div className="flex min-h-0 min-w-0 flex-col">
         <header className="flex h-12 shrink-0 items-center gap-2 border-b border-divider bg-surface px-3 md:px-4">
@@ -117,7 +117,7 @@ export function StaffShell({
                   <Dialog.Close className={buttonClass({ variant: "ghost", icon: true })} aria-label="Close navigation"><X aria-hidden /></Dialog.Close>
                 </div>
                 <div className="min-h-0 flex-1">
-                  <StaffSidebar brand={brand(false)} groups={groups} footer={footer} onNavigate={() => setMobileOpen(false)} />
+                  <AppSidebar brand={brand(false)} groups={groups} footer={footer} onNavigate={() => setMobileOpen(false)} />
                 </div>
               </Dialog.Popup>
             </Dialog.Portal>

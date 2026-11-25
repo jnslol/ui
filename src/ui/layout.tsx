@@ -3,7 +3,7 @@
 import * as React from "react"
 import { ChevronRight } from "lucide-react"
 
-import { cx, present } from "./staff-cx"
+import { cx, present } from "./cx"
 
 /**
  * The five page templates share these pieces:

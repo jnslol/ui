@@ -1,7 +1,7 @@
 import { History } from "lucide-react"
-import { Avatar } from "./staff-avatar"
-import { Badge, EmptyState, type Tone } from "./staff-display"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./staff-card"
+import { Avatar } from "./avatar"
+import { Badge, EmptyState, type Tone } from "./display"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card"
 
 export type ActivityEntry = {
   id: string

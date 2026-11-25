@@ -1,12 +1,12 @@
 "use client"
 
 import { useState, type FormEvent } from "react"
-import { Button, buttonClass } from "./staff-button"
-import { Callout } from "./staff-display"
-import { Field, Input, Textarea } from "./staff-form"
-import { Breadcrumbs, FormSection, Page, PageHeader, SaveBar } from "./staff-layout"
-import { statusOptions, type ProjectDraft } from "./staff-project"
-import { Select } from "./staff-select"
+import { Button, buttonClass } from "./button"
+import { Callout } from "./display"
+import { Field, Input, Textarea } from "./form"
+import { Breadcrumbs, FormSection, Page, PageHeader, SaveBar } from "./layout"
+import { statusOptions, type ProjectDraft } from "./project"
+import { Select } from "./select"
 
 const emptyDraft: ProjectDraft = { name: "", owner: "", status: "planning", notes: "" }
 

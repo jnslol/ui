@@ -1,5 +1,5 @@
 import { Separator as BaseSeparator } from "@base-ui/react/separator"
-import { cx } from "./staff-cx"
+import { cx } from "./cx"
 
 export function Separator({ orientation = "horizontal", className, ...props }: Omit<BaseSeparator.Props, "className"> & { className?: string }) {
   return (

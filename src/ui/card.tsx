@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react"
-import { cx } from "./staff-cx"
+import { cx } from "./cx"
 
 export function Card({ className, ...props }: ComponentProps<"div">) {
   return <div className={cx("min-w-0 rounded-card border bg-surface", className)} {...props} />

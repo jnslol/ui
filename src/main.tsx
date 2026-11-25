@@ -3,17 +3,17 @@ import { createRoot } from "react-dom/client"
 import { BookOpen, Box, Download, FileText, Folder, House, LayoutGrid, PanelsTopLeft, Settings } from "lucide-react"
 import { Components, componentLinks, InstallCommand, installCommand } from "./catalog"
 import { ActivityPage, Blocks, Overview, Setup, Templates, repository } from "./guide"
-import { buttonClass } from "./ui/staff-button"
+import { buttonClass } from "./ui/button"
 import { sampleProjects } from "./demo-data"
-import { TooltipProvider } from "./ui/staff-overlay"
-import { ProjectList } from "./ui/staff-list-page"
-import { ProjectRecord } from "./ui/staff-record-page"
-import { ProjectForm } from "./ui/staff-form-page"
-import { WorkspaceSettings } from "./ui/staff-settings-page"
-import { WorkspacePage } from "./ui/staff-workspace-page"
-import { ProjectSidebar, WorkspaceSidebar } from "./ui/staff-sidebar-blocks"
-import { StaffShell, type SidebarGroup } from "./ui/staff-shell"
-import { useStaffTheme } from "./ui/staff-theme"
+import { TooltipProvider } from "./ui/overlay"
+import { ProjectList } from "./ui/list-page"
+import { ProjectRecord } from "./ui/record-page"
+import { ProjectForm } from "./ui/form-page"
+import { WorkspaceSettings } from "./ui/settings-page"
+import { WorkspacePage } from "./ui/workspace-page"
+import { ProjectSidebar, WorkspaceSidebar } from "./ui/sidebar-blocks"
+import { AppShell, type SidebarGroup } from "./ui/shell"
+import { useTheme } from "./ui/theme"
 import "./index.css"
 
 const links = [
@@ -33,7 +33,7 @@ const recordHref = (id: string) => `#/projects/${id}`
 
 function Catalog() {
   const page = useSyncExternalStore(subscribe, path)
-  const [theme, setTheme] = useStaffTheme()
+  const [theme, setTheme] = useTheme()
   const [projects, setProjects] = useState(sampleProjects)
   const [compact, setCompact] = useState(false)
 
@@ -76,14 +76,14 @@ function Catalog() {
 
   return (
     <TooltipProvider>
-      <StaffShell pageKey={page} context={title} groups={groups} compact={compact} onCompactChange={setCompact}
+      <AppShell pageKey={page} context={title} groups={groups} compact={compact} onCompactChange={setCompact}
         brand={(collapsed) => <><span className="grid size-6 shrink-0 place-items-center rounded-control bg-accent text-accent-on"><Box className="size-4" aria-hidden /></span>{!collapsed && "jns ui"}</>}
         actions={<a href={repository} className={buttonClass({ variant: "ghost", size: "xs" })}>GitHub</a>}
         footer={<a href={new URL("r/registry.json", document.baseURI).href} className="text-label text-muted hover:text-fg">Registry index ↗</a>}>
         {content}
         {block && <div className="mx-auto max-w-[1400px] px-4 pb-6 md:px-6"><InstallCommand key={block}
           command={installCommand(`${block}-page`)} /></div>}
-      </StaffShell>
+      </AppShell>
     </TooltipProvider>
   )
 }

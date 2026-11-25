@@ -1,4 +1,4 @@
-import type { Project } from "./ui/staff-project"
+import type { Project } from "./ui/project"
 
 export const sampleProjects: Project[] = [
   { id: "900bcbf4-94cb-4ad2-95ef-3655d8e1b602", name: "North Campus rollout", owner: "Maya Chen", status: "active", notes: "Phase one covers the main building. Coordinate site access with facilities before scheduling installation." },

@@ -1,10 +1,10 @@
 import { ArrowUpRight, BookOpen, Box, Download, PanelsTopLeft } from "lucide-react"
 import { InstallCommand, installCommand, registryUrl } from "./catalog"
 import { sampleProjects } from "./demo-data"
-import { ActivityFeed, type ActivityEntry } from "./ui/staff-activity-feed"
-import { buttonClass } from "./ui/staff-button"
-import { Badge } from "./ui/staff-display"
-import { Page, PageHeader, Panel, Section } from "./ui/staff-layout"
+import { ActivityFeed, type ActivityEntry } from "./ui/activity-feed"
+import { buttonClass } from "./ui/button"
+import { Badge } from "./ui/display"
+import { Page, PageHeader, Panel, Section } from "./ui/layout"
 
 export const repository = "https://github.com/jnslol/ui"
 const exampleProjectId = sampleProjects[0].id
@@ -70,9 +70,9 @@ export function Setup() {
         <p>The CLI puts the files in the directory configured by <code>aliases.ui</code> and installs their dependencies.</p>
       </Section>
       <Section title="Import the tokens">
-        <p>Import <code>staff-tokens.css</code> in your global stylesheet, directly after Tailwind. Adjust the path to your UI directory.</p>
-        <pre className="overflow-x-auto rounded-card border border-divider bg-surface p-3 text-label">{'@import "tailwindcss";\n@import "./components/ui/staff-tokens.css";'}</pre>
-        <p>Set <code>data-theme</code> on <code>html</code> to <code>light</code> or <code>dark</code>, or use the <code>useStaffTheme</code> hook to follow a saved preference or the system setting.</p>
+        <p>Import <code>tokens.css</code> in your global stylesheet, directly after Tailwind. Adjust the path to your UI directory.</p>
+        <pre className="overflow-x-auto rounded-card border border-divider bg-surface p-3 text-label">{'@import "tailwindcss";\n@import "./components/ui/tokens.css";'}</pre>
+        <p>Set <code>data-theme</code> on <code>html</code> to <code>light</code> or <code>dark</code>, or use the <code>useTheme</code> hook to follow a saved preference or the system setting.</p>
       </Section>
       <Section title="Use the JNS namespace">
         <p>Merge this configuration into your existing <code>components.json</code> to install items by name.</p>
@@ -86,7 +86,7 @@ export function Setup() {
 export function Blocks() {
   return (
     <Page width="narrow">
-      <PageHeader title="Pages and blocks" description="Preview complete staff interfaces, then install the pieces you want." />
+      <PageHeader title="Pages and blocks" description="Preview complete interfaces, then install the pieces you want." />
       {blocks.map(({ name, item, href, description }) => (
         <Section key={item} title={name} description={description}
           actions={<a href={href} className={buttonClass({ size: "xs" })}>Open preview <ArrowUpRight aria-hidden /></a>}>

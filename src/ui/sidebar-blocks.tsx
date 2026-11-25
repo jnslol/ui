@@ -2,14 +2,14 @@
 
 import { useId, useState, type ReactNode } from "react"
 import { Building2, Check, ChevronsUpDown, Folder, FolderKanban, LayoutGrid, ListChecks, Search, Settings, Users } from "lucide-react"
-import { Avatar } from "./staff-avatar"
-import { Button, buttonClass } from "./staff-button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./staff-card"
-import { Badge, EmptyState, Table, Td, Th, Tr } from "./staff-display"
-import { AffixInput, Switch } from "./staff-form"
-import { Page, PageHeader, Panel, SettingsRow, SettingsSection, StatGrid } from "./staff-layout"
-import { Menu } from "./staff-overlay"
-import { StaffShell, type SidebarGroup } from "./staff-shell"
+import { Avatar } from "./avatar"
+import { Button, buttonClass } from "./button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card"
+import { Badge, EmptyState, Table, Td, Th, Tr } from "./display"
+import { AffixInput, Switch } from "./form"
+import { Page, PageHeader, Panel, SettingsRow, SettingsSection, StatGrid } from "./layout"
+import { Menu } from "./overlay"
+import { AppShell, type SidebarGroup } from "./shell"
 
 const workspaces = {
   "North operations": [
@@ -69,7 +69,7 @@ function SidebarBlock({ variant, actions }: BlockProps & { variant: "workspace" 
   const heading = navigation[section].label
 
   return (
-    <StaffShell
+    <AppShell
       context={heading} actions={actions} groups={groups} compact={compact} onCompactChange={setCompact} pageKey={section}
       brand={(collapsed) => collapsed ? <FolderKanban aria-hidden className="size-4" /> : workspaceVariant ? (
         <Menu align="start" trigger={
@@ -134,6 +134,6 @@ function SidebarBlock({ variant, actions }: BlockProps & { variant: "workspace" 
           </SettingsSection>
         )}
       </Page>
-    </StaffShell>
+    </AppShell>
   )
 }

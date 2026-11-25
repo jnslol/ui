@@ -11,7 +11,7 @@ import { ToggleGroup as BaseToggleGroup } from "@base-ui/react/toggle-group"
 import { Toggle as BaseToggle } from "@base-ui/react/toggle"
 import { Check, Minus } from "lucide-react"
 
-import { cx } from "./staff-cx"
+import { cx } from "./cx"
 
 const control =
   "min-w-0 rounded-control border border-control bg-surface px-2.5 text-body text-fg shadow-control outline-none transition-colors placeholder:text-faint hover:border-border-hover focus:border-focus focus:ring-2 focus:ring-focus-ring disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-danger-dot data-[invalid]:border-danger-dot"

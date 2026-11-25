@@ -1,9 +1,9 @@
 "use client"
 
-import { Page, PageHeader, SettingsRow, SettingsSection } from "./staff-layout"
-import { Switch } from "./staff-form"
-import { Select } from "./staff-select"
-import type { Theme } from "./staff-theme"
+import { Page, PageHeader, SettingsRow, SettingsSection } from "./layout"
+import { Switch } from "./form"
+import { Select } from "./select"
+import type { Theme } from "./theme"
 
 export function WorkspaceSettings({
   theme, onThemeChange, compact, onCompactChange,

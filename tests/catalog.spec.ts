@@ -3,19 +3,21 @@ import { expect, test } from "@playwright/test"
 test("serves installable registry items at their documented URLs", async ({ request }) => {
   const manifest = await request.get("/r/registry.json")
   expect(manifest.ok()).toBe(true)
-  const { items } = await manifest.json() as { items: { name: string }[] }
+  const { items } = await manifest.json() as { items: { name: string; type: string }[] }
   expect(items.map((item) => item.name)).toEqual(expect.arrayContaining([
     "theme", "avatar", "accordion", "sidebar", "sidebar-workspace", "sidebar-projects", "activity-feed",
     "list-page", "record-page", "form-page", "settings-page", "workspace-page",
   ]))
-  for (const { name } of items) {
+  for (const { name, type } of items) {
     expect(name).not.toMatch(/^jns-/)
     const response = await request.get(`/r/${name}.json`)
     expect(response.ok()).toBe(true)
     const item = await response.json()
     expect(item.name).toBe(name)
+    // Utilities (hooks) carry no styles; everything visual brings the tokens.
+    if (type === "registry:lib") continue
     expect(item.files).toEqual(expect.arrayContaining([
-      expect.objectContaining({ target: "@ui/staff-tokens.css", content: expect.stringContaining("@theme inline") }),
+      expect.objectContaining({ target: "@ui/tokens.css", content: expect.stringContaining("@theme inline") }),
     ]))
   }
 })
